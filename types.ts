@@ -10,7 +10,6 @@ export interface SpeakerConfig {
   volume: number;
   toneDescription: string;
   temperature: number;
-  seed: number; // The key to deterministic voice generation
 }
 
 export interface Voice {

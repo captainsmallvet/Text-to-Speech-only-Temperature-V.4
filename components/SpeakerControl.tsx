@@ -28,7 +28,7 @@ const SpeakerControl: React.FC<SpeakerControlProps> = ({
   const [isPreviewing, setIsPreviewing] = useState(false);
   const customVoices = allVoices.filter(v => v.isCustom);
 
-  // Consistency score depends on BOTH seed being set and low temperature
+  // Consistency score depends on low temperature
   const stabilityScore = useMemo(() => {
     const tempImpact = (2 - config.temperature) / 1.5; 
     return Math.min(100, Math.round(tempImpact * 100));
@@ -51,10 +51,6 @@ const SpeakerControl: React.FC<SpeakerControlProps> = ({
     } finally {
       setIsPreviewing(false);
     }
-  };
-
-  const randomizeSeed = () => {
-    onConfigChange({ ...config, seed: Math.floor(Math.random() * 1000000) });
   };
 
   return (
@@ -104,51 +100,33 @@ const SpeakerControl: React.FC<SpeakerControlProps> = ({
       </div>
 
       <div className="flex flex-col gap-4 mb-4">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label htmlFor={`voice-${speakerName}`} className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">
-                Voice Model
-              </label>
-              <select
-                id={`voice-${speakerName}`}
-                value={config.voice}
-                onChange={(e) => onConfigChange({ ...config, voice: e.target.value })}
-                className="w-full bg-gray-700 border border-gray-600 rounded-md p-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
-              >
-                <optgroup label="Pre-built Voices">
-                    {AVAILABLE_VOICES.map((voice: Voice) => (
+        <div>
+            <label htmlFor={`voice-${speakerName}`} className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">
+            Voice Model
+            </label>
+            <select
+            id={`voice-${speakerName}`}
+            value={config.voice}
+            onChange={(e) => onConfigChange({ ...config, voice: e.target.value })}
+            className="w-full bg-gray-700 border border-gray-600 rounded-md p-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            >
+            <optgroup label="Pre-built Voices">
+                {AVAILABLE_VOICES.map((voice: Voice) => (
+                <option key={voice.id} value={voice.id}>
+                    {voice.name}
+                </option>
+                ))}
+            </optgroup>
+            {customVoices.length > 0 && (
+                <optgroup label="Custom Voices">
+                    {customVoices.map((voice: Voice) => (
                     <option key={voice.id} value={voice.id}>
-                        {voice.name}
+                        {voice.name} (Custom)
                     </option>
                     ))}
                 </optgroup>
-                {customVoices.length > 0 && (
-                    <optgroup label="Custom Voices">
-                        {customVoices.map((voice: Voice) => (
-                        <option key={voice.id} value={voice.id}>
-                            {voice.name} (Custom)
-                        </option>
-                        ))}
-                    </optgroup>
-                )}
-              </select>
-            </div>
-
-            <div>
-              <div className="flex justify-between items-center mb-1">
-                <label htmlFor={`seed-${speakerName}`} className="block text-xs font-bold text-gray-400 uppercase tracking-widest">
-                  Voice DNA (Seed)
-                </label>
-                <button onClick={randomizeSeed} className="text-[10px] text-indigo-400 hover:text-indigo-300">New DNA 🎲</button>
-              </div>
-              <input
-                id={`seed-${speakerName}`}
-                type="number"
-                value={config.seed}
-                onChange={(e) => onConfigChange({ ...config, seed: parseInt(e.target.value) || 0 })}
-                className="w-full bg-gray-700 border border-gray-600 rounded-md p-2 text-sm text-indigo-300 font-mono focus:outline-none focus:ring-2 focus:ring-indigo-500"
-              />
-            </div>
+            )}
+            </select>
         </div>
 
         <div className="bg-black/30 p-3 rounded-lg border border-gray-700/50">
@@ -163,7 +141,7 @@ const SpeakerControl: React.FC<SpeakerControlProps> = ({
                 ></div>
             </div>
             <p className="text-[9px] text-gray-500 mt-2 leading-tight">
-                * To fix voice across batches: Lock the <b>Voice DNA</b> and use <b>Temperature &lt; 0.8</b>
+                * To fix voice across batches: Use <b>Temperature &lt; 0.8</b>
             </p>
         </div>
       </div>

@@ -47,9 +47,8 @@ const callGeminiTTS = async (
     text: string, 
     voice: string, 
     modelId: string,
-    seed?: number, 
     tone?: string,
-    temperature: number = 0.7,
+    temperature: number = 0.75,
     attempt: number = 1,
     onStatusUpdate?: (msg: string) => void,
     checkAborted?: () => boolean,
@@ -72,7 +71,6 @@ const callGeminiTTS = async (
             config: {
                 responseModalities: [Modality.AUDIO],
                 temperature: temperature,
-                seed: seed,
                 speechConfig: {
                     voiceConfig: {
                         prebuiltVoiceConfig: { voiceName: voice },
@@ -105,13 +103,13 @@ const callGeminiTTS = async (
                 await delay(1000);
             }
             
-            return callGeminiTTS(text, voice, modelId, seed, tone, temperature, attempt, onStatusUpdate, checkAborted, progressLabel);
+            return callGeminiTTS(text, voice, modelId, tone, temperature, attempt, onStatusUpdate, checkAborted, progressLabel);
         }
 
         if (attempt <= 3 && (errorMsg.includes("500") || errorMsg.includes("Internal Error"))) {
             if (onStatusUpdate) onStatusUpdate(`${progressLabel}\n\n⚠️ Server ขัดข้อง... กำลังลองใหม่รอบที่ ${attempt}/3`);
             await delay(attempt * 2000);
-            return callGeminiTTS(text, voice, modelId, seed, tone, temperature, attempt + 1, onStatusUpdate, checkAborted, progressLabel);
+            return callGeminiTTS(text, voice, modelId, tone, temperature, attempt + 1, onStatusUpdate, checkAborted, progressLabel);
         }
 
         throw error;
@@ -140,8 +138,8 @@ const handleInterBatchWait = async (
     }
 };
 
-export const generateSingleLineSpeech = async (text: string, voice: string, modelId: string, seed?: number, tone?: string, temperature: number = 0.7): Promise<Blob | null> => {
-    const pcmData = await callGeminiTTS(text, voice, modelId, seed, tone, temperature);
+export const generateSingleLineSpeech = async (text: string, voice: string, modelId: string, tone?: string, temperature: number = 0.75): Promise<Blob | null> => {
+    const pcmData = await callGeminiTTS(text, voice, modelId, tone, temperature);
     if (pcmData) return createWavBlob([pcmData]);
     return null;
 };
@@ -198,7 +196,7 @@ export const generateMultiLineSpeech = async (
             const snippet = batch.text.length > 50 ? batch.text.substring(0, 50) + "..." : batch.text;
             const progressLabel = `✅ งานที่เสร็จแล้ว: ${percent}%\n🔊 กำลังพากย์: ${batch.speaker}\n📄 ข้อความปัจจุบัน: "${snippet}"`;
             
-            const pcm = await callGeminiTTS(batch.text, config.voice, modelId, config.seed, config.toneDescription, config.temperature, 1, onStatusUpdate, checkAborted, progressLabel);
+            const pcm = await callGeminiTTS(batch.text, config.voice, modelId, config.toneDescription, config.temperature, 1, onStatusUpdate, checkAborted, progressLabel);
             if (pcm) {
                 audioChunks.push(pcm);
                 processedChars += batch.text.length;
@@ -273,7 +271,7 @@ export const generateSeparateSpeakerSpeech = async (
           const snippet = batchText.length > 50 ? batchText.substring(0, 50) + "..." : batchText;
           const progressLabel = `📂 สร้างไฟล์แยก: ${speaker}\n📄 ข้อความปัจจุบัน: "${snippet}"`;
           
-          const pcm = await callGeminiTTS(batchText, config.voice, modelId, config.seed, config.toneDescription, config.temperature, 1, onStatusUpdate, checkAborted, progressLabel);
+          const pcm = await callGeminiTTS(batchText, config.voice, modelId, config.toneDescription, config.temperature, 1, onStatusUpdate, checkAborted, progressLabel);
           if (pcm) {
               audioChunks.push(pcm);
               if (!isLastBatchOverall) {
