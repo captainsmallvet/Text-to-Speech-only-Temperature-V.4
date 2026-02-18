@@ -11,7 +11,7 @@ import type { DialogueLine, SpeakerConfig, Voice, TextModel } from './types';
 import { AVAILABLE_VOICES, EXAMPLE_SCRIPT, TEXT_MODELS, TTS_MODELS, DEFAULT_TONE } from './constants';
 import { CopyIcon, LoadingSpinner } from './components/icons';
 
-const APP_VERSION = "v1.9.46 (Removed Voice Seeds)";
+const APP_VERSION = "v1.9.47 (Default Pro TTS)";
 
 const App: React.FC = () => {
   const [inputKey, setInputKey] = useState<string>('');
@@ -59,7 +59,8 @@ const App: React.FC = () => {
   
   // Model States
   const [textModelId, setTextModelId] = useState<string>(TEXT_MODELS[0].id);
-  const [ttsModelId, setTtsModelId] = useState<string>(TTS_MODELS[0].id);
+  // Changed default to TTS_MODELS[1] which corresponds to 'gemini-2.5-pro-preview-tts'
+  const [ttsModelId, setTtsModelId] = useState<string>(TTS_MODELS[1].id);
 
   const [maxCharsPerBatch, setMaxCharsPerBatch] = useState<number>(1900);
   const [interBatchDelay, setInterBatchDelay] = useState<number>(120);
