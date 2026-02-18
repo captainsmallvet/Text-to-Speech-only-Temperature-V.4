@@ -11,7 +11,7 @@ import type { DialogueLine, SpeakerConfig, Voice, TextModel } from './types';
 import { AVAILABLE_VOICES, EXAMPLE_SCRIPT, TEXT_MODELS, TTS_MODELS, DEFAULT_TONE } from './constants';
 import { CopyIcon, LoadingSpinner } from './components/icons';
 
-const APP_VERSION = "v1.9.47 (Default Pro TTS)";
+const APP_VERSION = "v1.9.48 (Default Tone: comfortable)";
 
 const App: React.FC = () => {
   const [inputKey, setInputKey] = useState<string>('');
@@ -171,7 +171,7 @@ const App: React.FC = () => {
           newConfigs.set(speaker, {
             voice: defaultVoice.id,
             volume: 1, 
-            toneDescription: '',
+            toneDescription: 'comfortable:',
             temperature: 0.75
           });
         }

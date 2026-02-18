@@ -39,7 +39,7 @@ export const AVAILABLE_VOICES: Voice[] = [
   },
 ];
 
-export const DEFAULT_TONE = "";
+export const DEFAULT_TONE = "comfortable:";
 
 export const TEXT_MODELS: TextModel[] = [
   { id: 'gemini-3-flash-preview', name: 'Gemini 3 Flash (Fast)', description: 'Best for simple logic and quick tasks' },
