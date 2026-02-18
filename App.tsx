@@ -11,7 +11,7 @@ import type { DialogueLine, SpeakerConfig, Voice, TextModel } from './types';
 import { AVAILABLE_VOICES, EXAMPLE_SCRIPT, TEXT_MODELS, TTS_MODELS, DEFAULT_TONE } from './constants';
 import { CopyIcon, LoadingSpinner } from './components/icons';
 
-const APP_VERSION = "v1.9.48 (Default Tone: comfortable)";
+const APP_VERSION = "v1.9.49 (captainsmallvet)";
 
 const App: React.FC = () => {
   const [inputKey, setInputKey] = useState<string>('');
@@ -369,6 +369,7 @@ const App: React.FC = () => {
           <h1 className="text-4xl lg:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-teal-600">
             Text-to-Speech only Temperature V.4
           </h1>
+          <p className="text-sm font-bold text-gray-500 mt-2 tracking-widest uppercase">captainsmallvet</p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-6 text-xs">
             {/* Text Writer Model Selection */}
             <div className="flex items-center gap-2 bg-gray-900/50 p-2 rounded-lg border border-gray-800">
