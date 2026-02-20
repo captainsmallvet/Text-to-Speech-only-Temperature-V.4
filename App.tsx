@@ -62,7 +62,7 @@ const App: React.FC = () => {
   // Changed default to TTS_MODELS[1] which corresponds to 'gemini-2.5-pro-preview-tts'
   const [ttsModelId, setTtsModelId] = useState<string>(TTS_MODELS[1].id);
 
-  const [maxCharsPerBatch, setMaxCharsPerBatch] = useState<number>(1900);
+  const [maxCharsPerBatch, setMaxCharsPerBatch] = useState<number>(3000);
   const [interBatchDelay, setInterBatchDelay] = useState<number>(120);
 
   const allVoices = useMemo(() => [...AVAILABLE_VOICES, ...customVoices], [customVoices]);
@@ -105,7 +105,7 @@ const App: React.FC = () => {
     if (savedTextModelId) setTextModelId(savedTextModelId);
     if (savedTtsModelId) setTtsModelId(savedTtsModelId);
 
-    if (savedMaxChars) setMaxCharsPerBatch(parseInt(savedMaxChars) || 1900);
+    if (savedMaxChars) setMaxCharsPerBatch(parseInt(savedMaxChars) || 3000);
     if (savedDelay) setInterBatchDelay(parseInt(savedDelay) || 120);
 
     if (savedCustomVoices) {
@@ -133,7 +133,7 @@ const App: React.FC = () => {
               voice: config.voice || AVAILABLE_VOICES[0].id,
               volume: config.volume || 1,
               toneDescription: config.toneDescription || '',
-              temperature: config.temperature !== undefined ? config.temperature : 0.75
+              temperature: config.temperature !== undefined ? config.temperature : 0.8
             }];
           }));
           setSpeakerConfigs(migratedConfigs);
@@ -172,7 +172,7 @@ const App: React.FC = () => {
             voice: defaultVoice.id,
             volume: 1, 
             toneDescription: 'comfortable:',
-            temperature: 0.75
+            temperature: 0.8
           });
         }
         voiceIndex++;
@@ -369,7 +369,7 @@ const App: React.FC = () => {
           <h1 className="text-4xl lg:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-teal-600">
             Text-to-Speech only Temperature V.4
           </h1>
-          <p className="text-sm font-bold text-gray-500 mt-2 tracking-widest uppercase">captainsmallvet</p>
+          <p className="text-sm font-bold text-gray-500 mt-2 tracking-widest">captainsmallvet</p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-6 text-xs">
             {/* Text Writer Model Selection */}
             <div className="flex items-center gap-2 bg-gray-900/50 p-2 rounded-lg border border-gray-800">
